@@ -441,7 +441,7 @@ impl App {
 
     fn status(&mut self) -> Result<()> {
         let local_pause = local_pause_enabled(&self.config.paths);
-        let remote_pause = self.drydock.paused().unwrap_or(false);
+        let remote_pause = self.drydock.paused();
 
         println!(
             "config: {}",
@@ -457,7 +457,10 @@ impl App {
             config_display_path(&self.config.config.paths.acpx_sessions)
         );
         println!("local_pause: {}", local_pause);
-        println!("drydock_pause: {}", remote_pause);
+        match remote_pause {
+            Ok(value) => println!("drydock_pause: {}", value),
+            Err(error) => println!("drydock_pause: unavailable ({error})"),
+        }
         println!("dry_run: {}", self.cli.dry_run);
         println!("once: {}", self.cli.once);
         Ok(())
