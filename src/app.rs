@@ -190,18 +190,7 @@ impl App {
                 )?;
 
                 if decision.update_item_to_evaluating {
-                    if let Some(item_id) = entry.run.item_id {
-                        self.apply_item_status(item_id, "evaluating")?;
-                    } else {
-                        self.log(
-                            LogLevel::Warn,
-                            Some(entry.run.id),
-                            Some(&entry.pr.repo),
-                            Some(entry.pr.number),
-                            "notify",
-                            "run has no item_id; cannot move item to evaluating",
-                        )?;
-                    }
+                    self.apply_item_status(entry.run.item_id, "evaluating")?;
                 }
 
                 if decision.update_run_to_evaluating {
@@ -484,12 +473,14 @@ impl App {
 
     fn set_pause(&mut self, paused: bool) -> Result<()> {
         if self.cli.dry_run {
+            println!("dry-run: would set Drydock pause state to {paused}");
             println!(
                 "dry-run: would {} {}",
                 if paused { "create" } else { "remove" },
                 self.config.paths.pause_file.display()
             );
         } else {
+            self.drydock.set_paused(paused)?;
             set_local_pause(&self.config.paths, paused)?;
         }
 
@@ -500,9 +491,9 @@ impl App {
             None,
             "check",
             if paused {
-                "local pause enabled"
+                "pause enabled locally and in Drydock"
             } else {
-                "local pause disabled"
+                "pause disabled locally and in Drydock"
             },
         )
     }

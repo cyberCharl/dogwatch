@@ -131,7 +131,7 @@ mod tests {
     fn run(repo: &str, priority: ItemPriority) -> DrydockRun {
         DrydockRun {
             id: 1,
-            item_id: Some(1),
+            item_id: 1,
             item_title: Some("Item".to_string()),
             repo: repo.to_string(),
             branch: "branch".to_string(),

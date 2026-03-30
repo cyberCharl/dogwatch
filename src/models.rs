@@ -5,8 +5,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Deserialize)]
 pub struct DrydockRun {
     pub id: i64,
-    #[serde(default)]
-    pub item_id: Option<i64>,
+    pub item_id: i64,
     #[serde(default)]
     pub item_title: Option<String>,
     pub repo: String,
@@ -74,8 +73,8 @@ pub struct ItemUpdate {
     pub status: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
-pub struct PauseFlagResponse {
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PauseFlag {
     #[serde(default)]
     pub paused: bool,
 }
