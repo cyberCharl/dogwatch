@@ -1,0 +1,7 @@
+/target
+Cargo.lock
+*.db
+*.sqlite
+*.sqlite3
+*.log
+.DS_Store
