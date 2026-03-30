@@ -1,5 +1,9 @@
 use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
+
+fn null_to_empty<'de, D: Deserializer<'de>>(d: D) -> Result<String, D::Error> {
+    Ok(Option::<String>::deserialize(d)?.unwrap_or_default())
+}
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Deserialize)]
@@ -8,7 +12,9 @@ pub struct DrydockRun {
     pub item_id: i64,
     #[serde(default)]
     pub item_title: Option<String>,
+    #[serde(default, deserialize_with = "null_to_empty")]
     pub repo: String,
+    #[serde(default, deserialize_with = "null_to_empty")]
     pub branch: String,
     pub status: String,
     #[serde(default)]
